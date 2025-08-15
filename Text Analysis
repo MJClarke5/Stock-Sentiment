@@ -1,0 +1,27 @@
+install.packages("tm")        #Text mining
+install.packages("tidytext")  #Tidytext principles
+install.packages("dplyr")     #Data manipulation
+install.packages("stringr")   #String operations
+install.packages("wordcloud") #Word clouds
+install.packages("textdata")  #Sentiment lexicons
+
+Clean_Data <- tm_map(report_words_clean, content_transformer(tolower))      #Lowercase
+
+tokens <- Clean_Data %>%
+  unnest_tokens(word, text)
+
+#Remove stopwords and count
+tokens %>%
+  anti_join(stop_words) %>%
+  count(word, sort = TRUE)
+
+#Sentiment Frequency
+
+bing <- get_sentiments("bing")  # Bing lexicon
+
+tokens %>%
+  inner_join(bing, by = "word") %>%
+  count(sentiment)
+
+plot(sentiment)
+hist(sentiment)
