@@ -241,6 +241,4 @@ Blackwell in all of this configuration is in full production. Each Grace Blackwe
 
 We're at the beginning of reasoning AI and inference time scaling. But we're just at the start of the age of AI, multimodal AIs, enterprise AI sovereign AI and physical AI are right around the corner. We will grow strongly in 2025. Going forward, data centers will dedicate most of capex to accelerated computing and AI.
 
-Data centers will increasingly become AI factories, and every company will have either rented or self-operated. I want to thank all of you for joining us today. Come join us at GTC in a couple of weeks. We're going to be talking about Blackwell Ultra, Rubin, and other new computing, networking, reasoning AI, physical AI products, and a whole bunch more.
-
-Thank you.
+Data centers will increasingly become AI factories, and every company will have either rented or self-operated. I want to thank all of you for joining us today. Come join us at GTC in a couple of weeks. We're going to be talking about Blackwell Ultra, Rubin, and other new computing, networking, reasoning AI, physical AI products, and a whole bunch more. Thank you.

@@ -1,0 +1,126 @@
+---
+title: "Stock Sentiment Analysis"
+author: "Matthew Clarke"
+format: pdf
+editor: visual
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+1 + 1
+```
+
+You can add options to executable code like this
+
+```{r}
+#| echo: false
+2 * 2
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
+
+## Execute Code - WordCloud
+
+Code to pull an Earnings Report from Q4 2025 NVDA to create a Wordcloud
+
+```{r}
+#install.packages("tm")        #Text mining
+#install.packages("tidytext")  #Tidytext principles
+#install.packages("dplyr")     #Data manipulation
+#install.packages("stringr")   #String operations
+#install.packages("wordcloud") #Word clouds
+#install.packages("textdata")  #Sentiment lexicons
+install.packages("tidyr")     #Net Sentiment
+library(tm)
+library(tidytext)
+library(dplyr)
+library(stringr)
+library(wordcloud)
+library(textdata)
+library(tidyr)
+
+
+Q42025_NVDA <- readLines("C:/Users/mattc/git-folder/Stock-Sentiment/NVDA_Q4_2025_Earnings Call.txt")
+
+#Using TM
+#Clean_Data <- Corpus(VectorSource(Q42025_NVDA)) 
+Clean_Data <- VCorpus(VectorSource(Q42025_NVDA))
+
+# Convert to lowercase
+Cleaning <- tm_map(Clean_Data, content_transformer(tolower))
+# Remove punctuation
+Cleaning <- tm_map(Cleaning, removePunctuation)
+# Remove numbers
+Cleaning <- tm_map(Cleaning, removeNumbers)
+# Remove stopwords (common words like "the", "is")
+Cleaning <- tm_map(Cleaning, removeWords, stopwords("english"))
+# Strip whitespace
+Cleaning <- tm_map(Cleaning, stripWhitespace)
+
+#Building DTM
+dtm <- DocumentTermMatrix(Cleaning)
+# Convert DTM to a matrix
+m <- as.matrix(dtm)
+
+# Word frequencies
+word_freq <- sort(colSums(m), decreasing = TRUE)
+
+# Top 10 most frequent words
+head(word_freq, 10)
+
+#Visualization
+set.seed(1234)
+wordcloud(names(word_freq), word_freq, min.freq = 2, max.words = 100, random.order = FALSE)
+
+```
+
+```{r}
+
+file <- tibble(text = Q42025_NVDA)
+tokens <- file %>%
+  unnest_tokens(word, text)
+
+#Remove stopwords and count
+tokens %>%
+  anti_join(stop_words) %>%
+  count(word, sort = TRUE)
+
+#Sentiment Frequency
+
+bing <- get_sentiments("bing")  # Bing lexicon
+
+tokens %>%
+  inner_join(bing, by = "word") %>%
+  count(sentiment)
+
+sentiment <- inner_join(tokens, bing, by = "word")
+
+positive = 0
+negative = 0
+for(i in 1:length(sentiment$sentiment))
+{
+  if(sentiment$sentiment[i] == "positive")
+  {
+    positive = positive + 1
+  }
+  if(sentiment$sentiment[i] == "negative")
+  {
+    negative = negative + 1
+  }
+}
+tibble("Q42025", positive, negative)
+
+#Net Sentiment Score
+positive-negative
+NetSentiment = rbind(positive, negative)
+
+#Visualization
+barplot(NetSentiment, beside = TRUE, col = c("green","red"), names.arg = c("Positive", "Negative"),main = "Sentiment in Earning Call", ylab = "Count of Words")
+```
