@@ -1,0 +1,12 @@
+library(tidyverse)
+library(dylpr)
+library(root)
+
+
+combined_data <- data.table(c(NetSentiment, Positive, Negative, Stock_Diff, Quarter, Year))
+
+summary(lm(Stock_Diff ~ Positive + Negative, data = combined_data))
+summary(lm(Stock_Diff ~., data = combined_data))
+
+pred(summary(lm(Stock_Diff ~., data = combined_data))) 
+
