@@ -31,6 +31,30 @@ library(wordcloud)
 library(textdata)
 library(tidyr)
 
+#Attempting to scrape Earnings Calls from Montley Fool
+
+library(rvest)
+library(dplyr)
+library(stringr)
+
+# Define the URL (Motley Fool transcript)
+url1 <- "https://www.fool.com/earnings/call-transcripts/2024/05/29/nvidia-nvda-q1-2025-earnings-call-transcript/"
+url2 <- "https://www.fool.com/earnings/call-transcripts/2024/08/28/nvidia-nvda-q2-2025-earnings-call-transcript/"
+url3 <- "https://www.fool.com/earnings/call-transcripts/2024/11/20/nvidia-nvda-q3-2025-earnings-call-transcript/"
+url4 <- "https://www.fool.com/earnings/call-transcripts/2025/02/26/nvidia-nvda-q4-2025-earnings-call-transcript/"
+
+# Read the page
+page1 <- read_html(url1)
+page2 <- read_html(url2)
+page3 <- read_html(url3)
+page4 <- read_html(url4)
+
+# Inspect the page to find the correct node. Typically, transcripts are within article divs:
+transcript_text <- page %>%
+  html_nodes("article") %>%        # or another relevant selector such as "div.article-content"
+  html_text(trim = TRUE)
+
+#Traditional Text Upload Method
 
 Q42025_NVDA <- readLines("C:/Users/mattc/git-folder/Stock-Sentiment/NVDA_Q4_2025_Earnings Call.txt")
 
