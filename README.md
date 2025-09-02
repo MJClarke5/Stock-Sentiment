@@ -8,3 +8,5 @@ Using NLP, the Net Sentiment will be generated (Positive Words - Negative Words)
 Once established, LDA and linear regression will be ran to identify trends and potential correlation between sentiment from calls and immediate price changes. This consists of pulling stock data the day prior and the day after the earnings call, taking the difference, and establishing a data table to track this information to enable easier computation. This can allow for analysis of multiple earnings calls for one stock - enhancing the ability to identify trends.
 
 After this, more earnings will be explored of Mag 7 stocks.
+
+All current Earnings Call transcripts have been pulled from Montley Fool's repository - https://www.fool.com/earnings-call-transcripts/
